@@ -1,16 +1,21 @@
+import gdown
+import torch
 from flask import Flask, request, send_file, jsonify
 from PIL import Image, ImageEnhance
 import numpy as np
-import torch
-from realesrgan import RealESRGANer
-from basicsr.archs.rrdbnet_arch import RRDBNet
 from io import BytesIO
 
 app = Flask(__name__)
 
-# Load the RealESRGAN model and other necessary configurations here
+# Define the Google Drive link for your model file
+model_drive_id = '19wCVevCnjF2TNQomEnmP9ffgWGOkkapy'
+model_drive_link = f'https://drive.google.com/uc?id={model_drive_id}'
 
-model_path = 'models/RealESRGAN_x4plus.pth'  # Path to your RealESRGAN model
+# Download the model file when the app starts
+gdown.download(model_drive_link, 'models/RealESRGAN_x4plus.pth', quiet=False)
+
+# Load the RealESRGAN model and other necessary configurations here
+model_path = 'models/RealESRGAN_x4plus.pth'  # Path to your downloaded RealESRGAN model
 
 # Define the route for processing images
 @app.route('/process_image', methods=['POST'])
